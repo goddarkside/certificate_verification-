@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PMS Certificate Verification</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: url("{% static 'images/pms-bg.jpg' %}") no-repeat center center/cover;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .overlay-body {
+      background: rgba(0, 0, 0, 0.6);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+    }
+    .content {
+      z-index: 2;
+      text-align: center;
+      color: white;
+      width: 95%;
+    }
+    h1 {
+      margin: 0;
+      padding-top: 40px;
+      font-weight: bold;
+    }
+    table {
+      transition: all 0.4s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+<div class="overlay-body"></div>
+<div class="content">
+
+  <!-- Heading -->
+  <h1>Welcome to Postmortem Shala <br/> Certificate Data</h1>      
+<div class="row">
+      <div class="col-2"></div>
+      <div class="col-8">
+          {% if certificate_data %}
+          <div class="table-responsive">
+          <table id="studentTable" class="table table-bordered table-hover bg-white">
+            <tbody id="studentBody">
+              <!-- Collapsed View -->
+              <tr>
+                <th>Name</th>
+                <td>{{ certificate_data.name }}</td>
+              </tr>
+              <tr>
+                <th>College</th>
+                <td>{{ certificate_data.college }}</td>
+              </tr>
+              <tr>
+                <th>Action</th>
+                <td>
+                  <button class="btn btn-primary btn-sm" onclick="toggleDetails(this)">Show More</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+          {% elif message %}
+            <div class="alert alert-warning">{{ message }}</div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+
+
+
+<script>
+let expanded = false;
+
+function toggleDetails(btn) {
+  const tbody = document.getElementById("studentBody");
+
+  if (!expanded) {
+    // Expanded view
+    tbody.innerHTML = `
+      <tr><th>Name</th><td>{{ certificate_data.name }}</td></tr>
+      <tr><th>College</th><td>{{ certificate_data.college }}</td></tr>
+      <tr><th>Course</th><td>{{ certificate_data.course.name }}</td></tr>
+      <tr><th>Technology</th><td>{{ certificate_data.training_technology.technology }}</td></tr>
+      <tr><th>Duration</th><td>{{ certificate_data.training_duration.duration }}</td></tr>
+      <tr><th>Training Course</th><td>{{ certificate_data.training_course.course_name }}</td></tr>
+      <tr><th>Starting Day</th><td>{{ certificate_data.start_duration_from }}</td></tr>
+      <tr><th>End Day</th><td>{{ certificate_data.end_duration_to }}</td></tr>
+      <tr><th>Enroll No</th><td>{{ certificate_data.enroll_no }}</td></tr>
+      <tr><th>Verification No</th><td>{{ certificate_data.verification_no }}</td></tr>
+      <tr><th>Grade</th><td>{{ certificate_data.grade.name }}</td></tr>
+      <tr>
+        <th>Action</th>
+        <td><button class="btn btn-danger btn-sm" onclick="toggleDetails(this)">Show Less</button></td>
+      </tr>
+    `;
+    expanded = true;
+  } else {
+    // Collapsed view
+    tbody.innerHTML = `
+      <tr><th>Name</th><td>{{ certificate_data.name }}</td></tr>
+      <tr><th>College</th><td>{{ certificate_data.college }}</td></tr>
+      <tr>
+        <th>Action</th>
+        <td><button class="btn btn-primary btn-sm" onclick="toggleDetails(this)">Show More</button></td>
+      </tr>
+    `;
+    expanded = false;
+  }
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Certificate Form</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      animation: fadeIn 1s ease-in-out;
+      margin-top: 50px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      animation: slideDown 1s ease-in-out;
+    }
+
+    label {
+      font-weight: 500;
+    }
+
+    .form-control[readonly] {
+      background-color: #e9ecef;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes slideDown {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container col-md-8 offset-md-2">
+      <h2>Fill Certificate Details</h2>
+      <form method="POST">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+          <label for="name" class="form-label">Name:</label>
+          <input type="text" name="name" id="name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Enrollment No:</label>
+          <input type="text" value="Auto Generated" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Course:</label>
+          <select name="course" class="form-select" required>
+              <option value="">Select Course</option>
+            {% for course in courses %}
+              <option value="{{ course.id }}">{{ course.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="college" class="form-label">College:</label>
+          <input type="text" name="college" id="college" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Training:</label>
+          <select name="training" class="form-select" required>
+              <option value="">Select Training</option>
+            {% for training in trainings %}
+              <option value="{{ training.id }}">{{ training.course_name }} - {{ training.duration }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Technology:</label>
+          <select name="technology" class="form-select" required>
+            <option value="">Select Technology</option>
+            {% for techno in technologys %}
+              <option value="{{ techno.id }}">{{ techno.technology }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <label class="form-label">Start Date:</label>
+            <input type="date" name="duration_from" class="form-control" required>
+          </div>
+          <div class="col">
+            <label class="form-label">End Date:</label>
+            <input type="date" name="duration_to" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Grade:</label>
+          <select name="grade" class="form-select" required>
+            <option value="">Select Grade</option>
+            {% for grade in grades %}
+              <option value="{{ grade.id }}">{{ grade.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Verification No:</label>
+          <input type="text" value="Auto Generated" class="form-control" readonly>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Animate input focus
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.style.boxShadow = '0 0 8px #0d6efd';
+        input.style.transition = 'all 0.3s ease-in-out';
+      });
+      input.addEventListener('blur', () => {
+        input.style.boxShadow = 'none';
+      });
+    });
+  </script>
+</body>
+</html>

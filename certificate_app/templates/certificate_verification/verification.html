@@ -1,0 +1,314 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PMS Certificate Verification</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: url("{% static 'images/pms-bg.jpg' %}") no-repeat center center/cover;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .overlay-body {
+      background: rgba(0, 0, 0, 0.6);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+    }
+    .content {
+      z-index: 2;
+      text-align: center;
+      color: white;
+    }
+
+   
+    h1 {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        margin: 0;          /* Remove top margin */
+        padding-top: 40px;  /* Add spacing via padding instead */
+        font-weight: bold;
+        }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-custom {
+      font-size: 1.2rem;
+      padding: 15px 35px;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      background-color: rgb(196, 102, 30);
+      margin: 10px;
+      color: #fff;
+    }
+
+    .btn-custom:hover {
+      background-color: #e67e22;
+      transform: scale(1.05);
+    }
+
+    .info-icon {
+      margin-left: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      background: #f8f9fa;
+      font-size: 13px;
+      color: black;
+    }
+
+    .tooltip-custom {
+      visibility: hidden;
+      opacity: 0;
+      background: black;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+
+    .info-icon:hover .tooltip-custom {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Input card */
+    .input-box {
+      margin-top: 20px;
+      display: none;
+      justify-content: center;
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .card-custom {
+      background: white;
+      color: black;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      text-align: center;
+      min-width: 350px;
+      animation: scaleIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .blurred {
+      pointer-events: none;
+      opacity: 0.5;
+      filter: blur(1px);
+    }
+
+    .overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 999; /* above everything */
+}
+
+        .popup {
+        display: none;
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        color: black;
+        padding: 20px;
+        border-radius: 12px;
+        z-index: 1000;
+        max-width: 90%;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .popup img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+        }
+
+        .close-popup {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 40px;
+        padding: 4px 19px;
+        color: red;
+        background: #1c1c1c96;
+        margin: -50px -50px;
+        }
+
+        .more-details { display: none; }
+
+  </style>
+</head>
+<body>
+
+<div class="overlay-body"></div>
+<div class="content">
+
+            <!-- Heading centered at top -->
+        <h1>Welcome to Postmortem Shala <br/> Verification Certificate</h1>
+
+        <!-- Buttons below -->
+        <div class="button-container">
+            <!-- Button 1 -->
+            <div class="btn-wrapper text-center" id="btn1-wrapper">
+            <button class="btn btn-custom" onclick="showInput(1)" id="btn1">Verify With Enroll No.</button>
+            <span class="info-icon" onclick="showPopup('There you Have to enter Enroll No. this on left top side show in box')">i
+                <span class="tooltip-custom">Verify with your certificate's Enroll No.</span>
+            </span>
+            <div class="input-box" id="input1">
+                <div class="card-custom">
+                <h5>Enter Enroll No.</h5>
+                <form method="post">
+                {% csrf_token %}
+                <input type="text" name="e_id" class="form-control my-3" placeholder="Enter Enroll No">
+                <button class="btn btn-success w-100">Submit</button>
+                </form>
+                </div>
+            </div>
+            </div>
+
+            <!-- Button 2 -->
+            <div class="btn-wrapper text-center" id="btn2-wrapper">
+            <button class="btn btn-custom" onclick="showInput(2)" id="btn2">Verify With Verification No.</button>
+            <span class="info-icon" onclick="showPopup('There you Have to enter Verification No. this on center bottom side show in box')">i
+                <span class="tooltip-custom">Verify with your certificate's Verification No.</span>
+            </span>
+            <div class="input-box" id="input2">
+                <div class="card-custom">
+                <h5>Enter Verification No.</h5>
+                <form method="post">
+                {% csrf_token %}
+                <input type="text" name="v_id" class="form-control my-3" placeholder="Enter Verification No">
+                <button class="btn btn-success w-100">Submit</button>
+                </form>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" onclick="closePopup()"></div>
+
+        <!-- Popup -->
+        <div class="popup" id="popup">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            <img src="{% static 'images/id_show.jpg' %}" alt="Info Image">
+            <h2 id="popup-text">This is the popup content with an image.</h2>
+        </div>
+
+        
+
+  </div>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function showPopup(text) {
+      document.querySelector('.overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup-text').textContent = text;
+    }
+
+    function closePopup() {
+      document.querySelector('.overlay').style.display = 'none';
+      document.getElementById('popup').style.display = 'none';
+    }
+
+    document.querySelector('.overlay').addEventListener('click', closePopup);
+
+
+        function showInput(num) {
+            let input1 = document.getElementById("input1");
+            let input2 = document.getElementById("input2");
+            let wrapper1 = document.getElementById("btn1-wrapper");
+            let wrapper2 = document.getElementById("btn2-wrapper");
+
+            if (num === 1) {
+            if (input1.style.display === "flex") {
+                input1.style.display = "none";   // toggle off
+                wrapper2.classList.remove("blurred");
+            } else {
+                input1.style.display = "flex";
+                input2.style.display = "none";
+                wrapper2.classList.add("blurred");
+                wrapper1.classList.remove("blurred");
+            }
+            } else {
+            if (input2.style.display === "flex") {
+                input2.style.display = "none";   // toggle off
+                wrapper1.classList.remove("blurred");
+            } else {
+                input2.style.display = "flex";
+                input1.style.display = "none";
+                wrapper1.classList.add("blurred");
+                wrapper2.classList.remove("blurred");
+            }
+            }
+        }
+
+
+        
+        function toggleDetails() {
+            const row = document.querySelector('.more-details');
+            const btn = document.querySelector('button');
+            if (row.style.display === 'table-row') {
+                row.style.display = 'none';
+                btn.textContent = 'Show More';
+            } else {
+                row.style.display = 'table-row';
+                btn.textContent = 'Show Less';
+            }
+        }
+
+      
+       
+
+  </script>
+
+</body>
+</html>

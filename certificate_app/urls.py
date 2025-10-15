@@ -17,7 +17,6 @@ urlpatterns = [
 
 
     # verification Page
-
     path("certificate/verification/", views.certificate_verification, name="certificate_verification"),
     # path("/certificate/verification/search_certificate/", views.search_certificate, name="search_certificate"),
 
